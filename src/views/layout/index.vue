@@ -1,6 +1,17 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
 import pageNav from './pageNav.vue'
+
+import { useRouter } from 'vue-router'
+const $router = useRouter()
+
+import { useUserStore } from '@/stores/user'
+const user = useUserStore()
+
+const loginOut = ()=>{
+  user.setToken('')
+  $router.push('/login')
+}
 </script>
 
 <template>
@@ -10,6 +21,9 @@ import pageNav from './pageNav.vue'
         <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="20" height="20" />
         <h1>wzy-admin</h1>
       </a>
+      <span style="position: absolute;right: 16px;top: 0px;" @click="loginOut">
+        <el-icon><CircleCloseFilled /></el-icon>
+      </span>
       <!-- <HelloWorld msg="You did it!" /> -->
     </header>
     <div class="main">
