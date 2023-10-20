@@ -3,11 +3,11 @@ export const useUserStore = defineStore('user', {
   persist: true,
   state: () => {
     return {
-      token:''
+      token: ''
     }
   },
   actions: {
-    setToken(str:string) {
+    setToken(str: string) {
       this.token = str
     }
   }

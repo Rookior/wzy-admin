@@ -8,7 +8,7 @@ const $router = useRouter()
 import { useUserStore } from '@/stores/user'
 const user = useUserStore()
 
-const loginOut = ()=>{
+const loginOut = () => {
   user.setToken('')
   $router.push('/login')
 }
@@ -21,7 +21,7 @@ const loginOut = ()=>{
         <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="20" height="20" />
         <h1>wzy-admin</h1>
       </a>
-      <span style="position: absolute;right: 16px;top: 0px;" @click="loginOut">
+      <span style="position: absolute; right: 16px; top: 0px" @click="loginOut">
         <el-icon><CircleCloseFilled /></el-icon>
       </span>
       <!-- <HelloWorld msg="You did it!" /> -->
@@ -39,21 +39,21 @@ const loginOut = ()=>{
 .app {
   width: 100%;
   height: 100%;
-  header{
+  header {
     height: 48px;
     line-height: 48px;
     width: 100%;
     z-index: 100;
     background-color: #001529;
     padding: 0 16px;
-    .logo{
+    .logo {
       display: flex;
       align-items: center;
       height: 100%;
-      img{
+      img {
         height: 28px;
       }
-      h1{
+      h1 {
         height: 32px;
         margin: 0 0 0 12px;
         color: #fff;
@@ -65,7 +65,7 @@ const loginOut = ()=>{
   }
   .main {
     display: flex;
-    height:calc(100% - 48px);
+    height: calc(100% - 48px);
     .content {
       flex: 1;
       padding: 1rem;

@@ -38,7 +38,7 @@ const submitForm = async () => {
   if (!form) return
   await (form as any).validate((valid: any, fields: any) => {
     if (valid) {
-        login()
+      login()
     } else {
       console.log('error submit!', fields)
     }

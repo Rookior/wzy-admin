@@ -3,7 +3,7 @@ export const useRouteStore = defineStore('route', {
   // persist: true,
   state: () => {
     return {
-      hasRoute:false,
+      hasRoute: false,
       list: [
         {
           path: '/dashboard',
@@ -47,8 +47,8 @@ export const useRouteStore = defineStore('route', {
     }
   },
   actions: {
-    setHasRoute(flag:boolean) {
+    setHasRoute(flag: boolean) {
       this.hasRoute = flag
     }
-  },
+  }
 })

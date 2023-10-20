@@ -25,14 +25,12 @@ import menuItem from './menuItem.vue'
 //   console.log(key, keyPath)
 // }
 const handleSelect = (key: string, keyPath: string[]) => {
-    console.log(key, keyPath)
+  console.log(key, keyPath)
 }
-
-
 
 const jump = (url: any) => {
   if (!url || !router) return
-//   router.push(url)
+  //   router.push(url)
 }
 </script>
 
