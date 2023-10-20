@@ -1,6 +1,8 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import Layout from '../views/layout/index.vue'
 
+import RouterView from '../views/layout/routerView.vue'
+
 import { useRouteStore } from '@/stores/route'
 import { useUserStore } from '@/stores/user'
 
@@ -26,12 +28,12 @@ const router = createRouter({
           name: 'Home',
           meta: { title: 'Home', icon: 'home' }
         },
-        {
-          path: 'about',
-          component: () => import('../views/AboutView.vue'),
-          name: 'About',
-          meta: { title: 'About', icon: 'about' }
-        },
+        // {
+        //   path: 'about',
+        //   component: () => import('../views/AboutView.vue'),
+        //   name: 'About',
+        //   meta: { title: 'About', icon: 'about' }
+        // },
         {
           path: '404',
           component: () => import('../views/errorPage/404.vue'),
@@ -73,6 +75,43 @@ const router = createRouter({
 })
 
 const modules = import.meta.glob('../views/*/*.vue')
+const modulesDir = import.meta.glob('../views/*.vue')
+const loadRoute = (list: any, level: number = 1, parentPath = '') => {
+  return list.map((element) => {
+    if (element.children && element.children.length > 0) {
+      return {
+        path: element.path,
+        component: level === 1 ? Layout : RouterView,
+        redirect:
+          level === 1
+            ? element.path + '/' + element.children[0].path
+            : parentPath + '/' + element.path + '/' + element.children[0].path,
+        children: loadRoute(element.children, level + 1, element.path)
+      }
+    } else if(level === 1){
+      return {
+        path: '/',
+        component: Layout,
+        redirect: element.path,
+        children:[
+          {
+            path: element.path,
+            component:  modulesDir[`${element.component}.vue`],
+            name: element.name,
+            meta: { title: element.meta.title,icon:element.meta.icon }
+          }
+        ]
+      }
+    } else {
+      return {
+        path: element.path,
+        component: modules[`${element.component}.vue`],
+        name: element.name,
+        meta: { title: element.meta.title }
+      }
+    }
+  })
+}
 
 // 路由守卫
 router.beforeEach((to, from, next) => {
@@ -91,22 +130,14 @@ router.beforeEach((to, from, next) => {
   }
 
   if (!hasRoute) {
-    list.forEach((element) => {
-      const route = {
-        path: element.path,
-        component: Layout,
-        redirect: element.path + '/' + element.children[0].path,
-        children: element.children.map((child) => {
-          return {
-            path: child.path,
-            component: modules[`${child.component}.vue`],
-            name: child.name,
-            meta: { title: child.meta.title }
-          }
-        })
-      }
+    const routeList = loadRoute(list)
+
+    console.log(2222, routeList)
+
+    routeList.forEach((route) => {
       router.addRoute(route)
     })
+
     route.setHasRoute(true)
     next({ ...to, replace: true })
   } else if (to.matched.length === 0) {

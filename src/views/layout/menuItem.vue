@@ -1,33 +1,47 @@
 <script setup lang="ts">
-import { useRouteStore } from '@/stores/route'
-const route = useRouteStore()
-const { list } = route
+const props = defineProps({
+  menuData: {
+    type: Object //类型字符串
+  },
+  parentPath: {
+    type: String, //类型字符串
+    default: ''
+  },
+  mapLevel:{
+    type:Number,
+    default:1
+  }
+})
 
-// 获取vue2中的router与route
-import { useRouter } from 'vue-router'
-const router = useRouter()
-
-const jump = (url: any) => {
-  if (!url || !router) return
-  //   router.push(url)
-}
+const { menuData, parentPath } = props
 </script>
 
 <template>
-  <el-sub-menu v-for="(parent, parentIndex) in list" :key="parentIndex" :index="parent.path">
+  <el-sub-menu
+    :index="parentPath ? parentPath + '/' + menuData.path : menuData.path"
+    v-if="menuData.children && menuData.children.length > 0"
+  >
     <template #title>
-      <el-icon><component :is="parent.meta.icon" /></el-icon>
-      <span>{{ parent.meta.title }}</span>
+      <el-icon v-show="parentPath === ''"><component :is="menuData.meta.icon" /></el-icon>
+      <span>{{ menuData.meta.title }}</span>
     </template>
-    <el-menu-item
-      v-for="(child, childIndex) in parent.children"
-      :key="parentIndex + '-' + childIndex"
-      :index="parent.path + '/' + child.path"
-      @click="jump(parent.path + '/' + child.path)"
-    >
-      <span> {{ child.meta.title }} </span>
-    </el-menu-item>
+    <menuItem
+      :menuData="child"
+      :parentPath="parentPath ? parentPath + '/' + menuData.path : menuData.path"
+      :mapLevel="mapLevel + 1"
+      v-for="(child, childIndex) in menuData.children"
+      :key="childIndex"
+    ></menuItem>
   </el-sub-menu>
+
+  <el-menu-item v-else-if="mapLevel === 1" :index="menuData.path">
+    <el-icon><component :is="menuData.meta.icon" /></el-icon>
+    <span> {{ menuData.meta.title }} </span>
+  </el-menu-item>
+
+  <el-menu-item v-else :index="parentPath ? parentPath + '/' + menuData.path : menuData.path">
+    <span> {{ menuData.meta.title }} </span>
+  </el-menu-item>
 </template>
 
 <style lang="scss" scoped></style>

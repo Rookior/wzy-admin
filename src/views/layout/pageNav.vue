@@ -16,6 +16,11 @@ console.log(router, vue2Router, {
   ...vue2Route
 })
 
+import { useRouteStore } from '@/stores/route'
+const route = useRouteStore()
+const { list } = route
+
+
 import menuItem from './menuItem.vue'
 
 // const handleOpen = (key: string, keyPath: string[]) => {
@@ -42,20 +47,26 @@ const jump = (url: any) => {
       @select="handleSelect"
       router
     >
-      <menuItem></menuItem>
+      <menuItem :menuData="item" v-for="(item,index) in list" :key="index"></menuItem>
       <el-menu-item index="/home" @click="jump('/home')">
         <el-icon><HomeFilled /></el-icon>
         <span> Home </span>
       </el-menu-item>
-      <el-menu-item index="/about" @click="jump('/about')">
+      <!-- <el-menu-item index="/about" @click="jump('/about')">
         <el-icon><Menu /></el-icon>
         <span> About </span>
-      </el-menu-item>
+      </el-menu-item> -->
     </el-menu>
   </nav>
 </template>
 
 <style lang="scss" scoped>
+::v-deep{
+  .el-sub-menu.is-active > .el-sub-menu__title{
+    color: var(--el-menu-active-color);
+  }
+}
+
 .menu {
   flex-shrink: 0;
   font-size: 12px;
@@ -68,21 +79,7 @@ const jump = (url: any) => {
   }
 
   .el-menu-item.is-active {
-    // a{
     color: var(--el-menu-active-color);
-    // }
   }
-  .el-sub-menu.is-active ::v-deep {
-    .el-sub-menu__title {
-      color: var(--el-menu-active-color);
-    }
-  }
-  // a{
-  //   text-decoration: none;
-  //   color: #000;
-  // }
-  // a:hover{
-  //   color:var(--el-menu-active-color)
-  // }
 }
 </style>
