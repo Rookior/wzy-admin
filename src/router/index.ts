@@ -2,10 +2,19 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import Layout from '../views/layout/index.vue'
 
 import { useRouteStore } from '@/stores/route'
+import { useUserStore } from '@/stores/user'
 
 const router = createRouter({
   history: createWebHashHistory(),
   routes: [
+    {
+      path: '/login',
+      name: 'Login',
+      meta: {
+        title: '登录'
+      },
+      component: () => import('../views/login/index.vue')
+    },
     {
       path: '/',
       component: Layout,
@@ -44,7 +53,7 @@ const router = createRouter({
       ]
     },
     {
-      path: "/:pathMatch(.*)*",
+      path: '/:pathMatch(.*)*',
       component: () => import('../views/errorPage/404.vue')
     }
     // {
@@ -71,6 +80,15 @@ router.beforeEach((to, from, next) => {
   const route = useRouteStore()
   const { hasRoute, list } = route
 
+  const user = useUserStore()
+  const { token } = user
+
+  if (to.path === '/login') {
+    next()
+  }
+  if (!token) {
+    next({ path: '/login' })
+  }
 
   if (!hasRoute) {
     list.forEach((element) => {
@@ -90,12 +108,11 @@ router.beforeEach((to, from, next) => {
       router.addRoute(route)
     })
     route.setHasRoute(true)
-    next({ ...to, replace: true });
-  }else if (to.matched.length === 0) {
+    next({ ...to, replace: true })
+  } else if (to.matched.length === 0) {
     console.log(to, '跳转已被拦截')
-    next({ path: '/404', replace: true})
-  }else{
-    
+    next({ path: '/404', replace: true })
+  } else {
     next()
   }
 })
