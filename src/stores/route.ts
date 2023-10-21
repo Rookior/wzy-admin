@@ -27,7 +27,7 @@ export const useRouteStore = defineStore('route', {
         {
           path: '/form',
           name: 'form',
-          meta: { title: '表单页', icon: 'Odometer' },
+          meta: { title: '表单页', icon: 'Edit' },
           children: [
             {
               path: 'basicform',
@@ -40,17 +40,19 @@ export const useRouteStore = defineStore('route', {
               name: 'stepform',
               component: '../views/form/stepform',
               meta: { title: '分布表单' }
-            },{
+            },
+            {
               path: 'search',
               name: 'search',
               meta: { title: '搜索列表' },
-              children:[
+              children: [
                 {
                   path: 'articles',
                   name: 'articles',
                   component: '../views/search/articles',
                   meta: { title: '文章' }
-                },{
+                },
+                {
                   path: 'projects',
                   name: 'projects',
                   component: '../views/search/projects',

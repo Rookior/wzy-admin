@@ -20,7 +20,6 @@ import { useRouteStore } from '@/stores/route'
 const route = useRouteStore()
 const { list } = route
 
-
 import menuItem from './menuItem.vue'
 
 // const handleOpen = (key: string, keyPath: string[]) => {
@@ -47,7 +46,7 @@ const jump = (url: any) => {
       @select="handleSelect"
       router
     >
-      <menuItem :menuData="item" v-for="(item,index) in list" :key="index"></menuItem>
+      <menuItem :menuData="item" v-for="(item, index) in list" :key="index"></menuItem>
       <el-menu-item index="/home" @click="jump('/home')">
         <el-icon><HomeFilled /></el-icon>
         <span> Home </span>
@@ -61,8 +60,8 @@ const jump = (url: any) => {
 </template>
 
 <style lang="scss" scoped>
-::v-deep{
-  .el-sub-menu.is-active > .el-sub-menu__title{
+::v-deep {
+  .el-sub-menu.is-active > .el-sub-menu__title {
     color: var(--el-menu-active-color);
   }
 }

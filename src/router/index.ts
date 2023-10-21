@@ -74,10 +74,27 @@ const router = createRouter({
   ]
 })
 
+interface routeMeta {
+  title: string
+  icon: string
+}
+
+interface routeChildren {
+  path: string
+}
+
+interface routeObj {
+  path: string
+  name: string
+  meta: routeMeta
+  component: string
+  children: routeChildren[]
+}
+
 const modules = import.meta.glob('../views/*/*.vue')
 const modulesDir = import.meta.glob('../views/*.vue')
 const loadRoute = (list: any, level: number = 1, parentPath = '') => {
-  return list.map((element) => {
+  return list.map((element: routeObj) => {
     if (element.children && element.children.length > 0) {
       return {
         path: element.path,
@@ -88,17 +105,17 @@ const loadRoute = (list: any, level: number = 1, parentPath = '') => {
             : parentPath + '/' + element.path + '/' + element.children[0].path,
         children: loadRoute(element.children, level + 1, element.path)
       }
-    } else if(level === 1){
+    } else if (level === 1) {
       return {
         path: '/',
         component: Layout,
         redirect: element.path,
-        children:[
+        children: [
           {
             path: element.path,
-            component:  modulesDir[`${element.component}.vue`],
+            component: modulesDir[`${element.component}.vue`],
             name: element.name,
-            meta: { title: element.meta.title,icon:element.meta.icon }
+            meta: { title: element.meta.title, icon: element.meta.icon }
           }
         ]
       }
@@ -112,6 +129,8 @@ const loadRoute = (list: any, level: number = 1, parentPath = '') => {
     }
   })
 }
+
+import type { RouteRecordRaw } from 'vue-router'
 
 // 路由守卫
 router.beforeEach((to, from, next) => {
@@ -130,7 +149,7 @@ router.beforeEach((to, from, next) => {
   }
 
   if (!hasRoute) {
-    const routeList = loadRoute(list)
+    const routeList: Array<RouteRecordRaw> = loadRoute(list)
 
     console.log(2222, routeList)
 
